@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>Post Home</h1>
+  <a href="{{url_for('postCreate')}}" class="btn btn-sm-primary">Create</a>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Post ID</th>
+        <th scope="col">Cat Name or Cat id</th>
+        <th scope="col">Post Title</th>
+        <th scope="col">Post Content</th>
+        <th scope="col">Post Image</th>
+        <th scope="col">Created DT</th>
+        <th scope="col">Post Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in context.posts %}
+      <tr>
+        <th scope="row">{{post.id}}</th>
+        {%for cat in context.cats %}
+         {% if cat.id == post.cat_id %} 
+        <th scope="row">{{cat.name}}</th>
+        {% endif %}
+        {% endfor %}
+        <th scope="row">{{post.title}}</th>
+        <th scope="row">{{post.content}}</th>
+        <th scope="row"><img src="{{url_for('static',filename='imgs/'+post.image)}}" alt="Default.png"></th>
+        <th scope="row">{{post.created_at}}</th>
+        <th scope="row">
+          <a href="{{url_for('postEdit',id=post.id)}}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{{url_for('postDelete',id=post.id)}}" class="btn btn-sm btn-danger">Delete</a>
+        </th>
+        {%endfor%}
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+{% endblock %}

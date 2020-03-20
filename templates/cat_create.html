@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+   <div class=" col-md-6 offset-md-3">
+    <h1>Cat Create Page</h1>
+    <form method="POST">
+        <div class="form-group">
+          <label for="catname">Create Cat Name</label>
+          <input type="text" class="form-control" id="catname" placeholder="Cat Name" name="name">
+        </div>
+         
+        <button type="submit" class="btn btn-primary float-right">Create</button>
+      </form>
+
+   </div>
+</div>
+{% endblock %}
