@@ -139,14 +139,36 @@ def catDelete(id):
     return redirect('/')
 
 
-@app.route('/post/edit/<int:id>')
+@app.route('/post/edit/<int:id>',methods=['POST','GET'])
 def postEdit(id):
+    posts = Post.query.get_or_404(id)
     context = {
         "title":"Post Edit page",
         "cats" : Category.query.all(),
-        "posts": Post.query.get_or_404(id)
+        "posts": posts
     }
-    return render_template('post_edit.html',context=context)
+    if request.method=='POST':
+        filename = ''
+        file = request.files['image']
+    
+        if file.filename =='':
+            return redirect('/post/edit')
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+
+        title = request.form['title']
+        cat_id = request.form['catid']
+        content = request.form['content']
+        posts = Post(title=title,content=content,cat_id=cat_id, image=filename)
+        try:
+            db.session.commit()  #  if success
+            return redirect('/post')
+        except:
+            return redirect('post/edit')
+    else:
+        return render_template('post_edit.html',context=context)
 
 @app.route('/post')
 def postHome():
