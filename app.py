@@ -11,6 +11,8 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.secret_key = "334455"
 
+
+
 UPLOAD_FOLDER = "./static/imgs"
 ALLOWED_EXTENSION = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER']= UPLOAD_FOLDER
@@ -149,7 +151,7 @@ def postEdit(id):
     }
     if request.method=='POST':
         filename = ''
-        file = request.files['image']
+        file = request.files['images']
     
         if file.filename =='':
             return redirect('/post/edit')
@@ -161,7 +163,13 @@ def postEdit(id):
         title = request.form['title']
         cat_id = request.form['catid']
         content = request.form['content']
-        posts = Post(title=title,content=content,cat_id=cat_id, image=filename)
+
+        posts.title = title
+        posts.cat_id = cat_id
+        posts.image = filename
+        posts.content = content
+       
+        
         try:
             db.session.commit()  #  if success
             return redirect('/post')
@@ -227,3 +235,5 @@ def allowed_file(filename):
        
 if __name__=='__main__':
     app.run(debug=True)
+
+
